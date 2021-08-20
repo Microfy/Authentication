@@ -43,4 +43,4 @@ This means the only way for one teams microservice to call another teams microse
 2. The second option, is that the Gateway service is deployed once as a global service, in host mode so that it essentially is a sidecar present on each node in the swarm, and accessible over a well known local port such as localhost:8082 etc. 
 In this mode, teams that deploy compose files containing services to the swarm, again, do not attach them to the ingress network, but instead attach them to privately named networks the same as option 1.
 However the gateway service no longer needs to be part of their compose file definitions.
-The proxy service is then updated out of band, to be "attached" to the same private network which the teams microservices are published on. This makes those services "accessible" to other backend services in the swarm via the gateway, ensuring all requests are authenticated.
+The gateway service is then updated out of band, to be "attached" to the same private network which the teams microservices are published on. This makes those services "accessible" via the gateway, ensuring all requests are authenticated.
