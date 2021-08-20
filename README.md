@@ -38,7 +38,7 @@ An Authentication Gateway (or "Reverse Proxy") service that can be deployed "in 
 1. Each team that `docker stack deploys` their `docker compose` file to the swarm, can include this gateway service in their compose file.
 They don't attach their api service to the docker `ingress` network directly, instead they attach this gateway service to the ingress network, and also define a private network that is atteched to the proxy and their api services.
 The proxy will ensure all requests through the ingress network are authenticated before being forwarded to their api services over the private network. 
-This means the only way for one teams microservice to call another teams microservice, isby sending a request through the gateway, ensuring JWT authentication takes place.
+This means the only way for one teams microservice to call another teams microservice, isby sending a request through the gateway, ensuring JWT authentication takes place. The draw back of this approach is that you end up with each microservice having its own gateway, with its owr url that requests must be sent to, e.g `http://foo-gateway` to is used to call `foo` and `http://bar-gateway` a seperate gateway container instance is used to call service `bar`.
 
 2. The second option, is that the Gateway service is deployed once as a global service, in host mode so that it essentially is a sidecar present on each node in the swarm, and accessible over a well known local port such as localhost:8082 etc. 
 In this mode, teams that deploy compose files containing services to the swarm, again, do not attach them to the ingress network, but instead attach them to privately named networks the same as option 1.
