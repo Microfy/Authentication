@@ -29,7 +29,7 @@ This service is deployed to your swarm as a `global` service, on a published por
 This lets any service in the swarm, make an api call to this Authentication Server service, via a "localhost" https address on a standard port (i.e 445 or whatever you decide).
 Services can call a /token endpoint to exchange a "client id" and a "client secret" for an oauth bearer JWT token.
 This JWT token can then be used in the HTTP authorization header when making api calls to other backend services in the swarm. 
-The Authentication Server can run on HTTP or HTTPS depending on whether you want to ensure that client secrets that are sent to it, remain secret from snoping. Although, its less critical in this scenario as 
+The Authentication Server can run on HTTP or HTTPS depending on whether you want to ensure that client secrets that are sent to it, remain secure during transit. Although, its less critical in this scenario as 
 traffic should not actually leave the host due to the AS running essentially as side car the same node. If your host node is compromised and someone is snooping on internal traffic, you already have a large issue at this point, and SSL of client secrets is probably not going to help.
 
 ## Authentication Gateway Service
