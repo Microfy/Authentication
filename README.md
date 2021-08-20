@@ -8,7 +8,7 @@ Teams getting started with docker swarm might start with a couple of simple micr
 Services: `foo` and `bar` for example.
 They decide that they want `foo` to be able to call `bar` via it's http api, but because they also security in mind, they realise that they only want to allow authenticated calls between `foo` and `bar`.
 Typically they might come accross TLS Client Certificates and decide that every backend service should be using a client certificate when making api calls.
-Likewise all microservices that receive web api calls, should be behind ensuring the caller has a valid client certificate. 
+Likewise all microservices that receive web api calls, should be ensuring the caller has a valid client certificate. 
 This is know as mutual TLS or mTLS and is a common solution to this problem.
 
 However TLS is not free. There is:-
