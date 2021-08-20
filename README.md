@@ -15,6 +15,7 @@ However TLS is not free. There is:-
 
 - Overhead in performing the handshake.for each request.
 - Issue of how client applications should manage certificates. Should it be added to source control? Mounted from an external volume? What about if it expires? Does it need to be rotated? Perhaps it should be downloaded every day from some source? Applications should also make sure to authenticate incoming http requests to check the client certificate is valid. This is a cross cutting concern.
+- It does not allow for claims.
 
 The `OAuth` specification has an alternative flow to solve this problem. It's called the `client credentials` flow.
 Microfy aims to provide a couple of services that can easily be leveraged in your docker swarm deployments, to take care of this cross cutting concern of service to service authentication. 
