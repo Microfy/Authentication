@@ -1,0 +1,60 @@
+# Please refer https://aka.ms/HTTPSinContainer on how to setup an https developer certificate for your ASP .NET Core service.
+
+version: '3.4'
+
+services:
+  swarmclientmonitor:
+    image: swarmclientmonitor
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    ports:
+      - 5000:5000
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    volumes:
+      - ~/.vsdbg:/remote_debugger:rw
+    networks:   
+      - monitor
+
+  dummy-endpoint:
+    image: jannemattila/echo
+    ports:
+      - 2001:80
+    networks:
+      - monitor
+
+  swarm-listener:
+    # SEE https://swarmlistener.dockerflow.com/config/ 
+    image: dockerflow/docker-flow-swarm-listener
+    networks:
+       - monitor
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - DF_NOTIFY_CREATE_SERVICE_URL=http://dummy-endpoint:80/api/echo
+      - DF_NOTIFY_REMOVE_SERVICE_URL=http://dummy-endpoint:80/api/echo
+      - DF_NOTIFY_CREATE_SERVICE_METHOD=POST
+      - DF_NOTIFY_REMOVE_SERVICE_METHOD=POST
+      - DF_NOTIFY_CREATE_NODE_URL=http://dummy-endpoint:80/api/echo
+      - DF_NOTIFY_REMOVE_NODE_URL=http://dummy-endpoint:80/api/echo
+
+
+    deploy:
+      placement:
+        constraints: [node.role == manager]
+
+  dummy:
+    image: nginx
+    networks:
+       - monitor
+    labels:
+       - com.df.notify=true
+       - com.df.servicePath=/demo
+       - com.df.port=8080
+       
+networks:
+  monitor:
+    external: true
+
+ docker service create --name dummy-nginx --network monitor --label com.df.notify=true --label com.df.madeup=foo nginx

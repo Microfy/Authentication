@@ -1,0 +1,32 @@
+# Please refer https://aka.ms/HTTPSinContainer on how to setup an https developer certificate for your ASP .NET Core service.
+
+version: '3.4'
+
+services:
+  swarmclientmonitor:
+    image: swarmclientmonitor
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    ports:
+      - 5000:5000
+    networks:
+      - monitor
+      
+  swarm-listener:
+    image: dockerflow/docker-flow-swarm-listener
+    networks:
+      - monitor
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - DF_NOTIFY_CREATE_SERVICE_URL=http://swarmclientmonitor:5000/DockerServiceMonitor/Reconfigure
+      - DF_NOTIFY_REMOVE_SERVICE_URL=http://swarmclientmonitor:5000/DockerServiceMonitor/Remove
+    deploy:
+      placement:
+        constraints: [node.role == manager]
+
+networks:
+  monitor:
+    external: true
+
