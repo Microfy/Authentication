@@ -87,3 +87,8 @@ However we have to write the actual oauth api where clients can be configured, a
 Check these out:-
 
 - [ory](https://www.ory.sh/run-oauth2-server-open-source-api-security/)
+
+It should be possible to use ory:-
+  - admin endpoint would not be exposed publicly.
+  - `oauth-clients-auto-registration` container would use ory cli and be attached to same network as ory in order to perform admin functions like creating new clients.
+  - other services would use ory's token endpoint.
